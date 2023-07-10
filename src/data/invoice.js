@@ -4,7 +4,7 @@ export const invoice = {
   client: {
     name: "pepe",
     lastName: "Doe",
-    addres: {
+    address: {
       country: "USA",
       city: "Los Angeles",
       street: "One Street",
