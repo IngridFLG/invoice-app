@@ -22,6 +22,7 @@ export const InvoiceListView = ({title, items}) => {
 
         </tbody>
       </table>
+      
     </>
   );
 };

@@ -2,8 +2,7 @@ import PropTypes from 'prop-types';
 
 export const InvoiceClient = ({ title, client }) => {
   
-  const { name: nameClient, lastName, address } = client;
-  const { country, city, street, number } = address;
+  const { name: nameClient, lastName, address: {country, city, street, number}} = client;
 
   return (
     <>
