@@ -30,6 +30,8 @@ const invoiceInitial = {
 
 export const InvoiceApp = () => {
 
+const [activeForm, setActiveForm] = useState(false);
+
 const [counter, setCounter] = useState(4);
 
 const [invoice, setInvoice] = useState(invoiceInitial);
@@ -38,20 +40,12 @@ const [items, setItems] = useState([]);
 
 const [total, setTotal] = useState(0);
 
-const [formItemsState, setFormItemsState] = useState({
-  product: "",
-  price: "",
-  quantity: "",
-});
-
 const {
   id,
   name,
   client,
   company
 } = invoice;
-
-const { product, price, quantity } = formItemsState;
 
   useEffect( () => {
     const data = invoiceService();
@@ -63,30 +57,8 @@ const { product, price, quantity } = formItemsState;
     setTotal(calculateTotal(items))
   }, [items])
 
-  const onInputChange = ({ target: { name, value } }) => {
-    setFormItemsState({
-      ...formItemsState,
-      [ name ]: value,
-    });
-  };
-
-  const onInvoiceSubmit = (event) => {
-    event.preventDefault();
-
-    if (product.trim().length <= 1) return;
-    if (price.trim().length <= 1) {
-      alert("Error el precio no es un numero");
-      return;
-    }
-    if (isNaN(price.trim())) return;
-    if (quantity.trim().length < 1) {
-      alert("Error la cantidad tiene que ser mayor a 0");
-      return;
-    }
-    if (isNaN(quantity.trim())) {
-      alert("Error la cantidad tiene que ser un numero");
-      return;
-    }
+  const handleraddItems = ({product, price, quantity}) => {
+    
     setItems([
       ...items,
       {
@@ -96,12 +68,11 @@ const { product, price, quantity } = formItemsState;
         quantity: parseInt(quantity.trim(), 10),
       },
     ]);
-    setFormItemsState({
-      product: "",
-      price: "",
-      quantity: "",
-    });
     setCounter(counter + 1);
+  };
+
+  const onActiveForm = () => {
+    setActiveForm(!activeForm)
   };
 
   return (
@@ -126,49 +97,13 @@ const { product, price, quantity } = formItemsState;
               <div className="mb-3">
                 <TotalView total={total} />
               </div>
+              <div>
+              <button className="btn btn-primary mb-3" onClick={onActiveForm}>{!activeForm ? 'Agregar item' : 'Ocultar formulario'}</button>
+              </div>
+              
+              {!activeForm ? '' : <InvoiceForm handler={ (newItem) => handleraddItems(newItem) }/>}
 
-              {/* <InvoiceForm items={items}/> */}
-
-              <form
-                className="w-50"
-                onSubmit={(event) => onInvoiceSubmit(event)}
-              >
-                <div className="mb-3">
-                  <input
-                    type="text"
-                    name="product"
-                    value={product}
-                    className="form-control"
-                    placeholder="Producto"
-                    onChange={onInputChange}
-                  />
-                </div>
-                <div className="mb-3">
-                  <input
-                    type="text"
-                    name="price"
-                    value={price}
-                    className="form-control"
-                    placeholder="Precio"
-                    onChange={onInputChange}
-                  />
-                </div>
-                <div className="mb-3">
-                  <input
-                    type="text"
-                    name="quantity"
-                    value={quantity}
-                    className="form-control"
-                    placeholder="Cantidad"
-                    onChange={(event) => onInputChange(event)}
-                  />
-                </div>
-                <div>
-                  <button type="submit" className="btn btn-primary">
-                    Crear formulario
-                  </button>
-                </div>
-              </form>
+              {/* <InvoiceForm handler={ handleraddItems }/> */}
             </div>
           </div>
         </div>
