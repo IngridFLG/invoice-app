@@ -71,6 +71,10 @@ const {
     setCounter(counter + 1);
   };
 
+  const handlerDeleteItem = (id) => {
+      setItems(items.filter(item => item.id !== id))
+  }
+
   const onActiveForm = () => {
     setActiveForm(!activeForm)
   };
@@ -93,7 +97,7 @@ const {
               </div>
             </div>
             <div className="my-4">
-              <InvoiceListView title="Productos de la factura" items={items} />
+              <InvoiceListView title="Productos de la factura" items={items} handlerDeleteItem={id => handlerDeleteItem(id)}/>
               <div className="mb-3">
                 <TotalView total={total} />
               </div>
